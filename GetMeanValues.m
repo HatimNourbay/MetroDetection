@@ -1,7 +1,7 @@
 clear all;
 close all;
 
-%% Init by creating pictos of every number in BD
+%% Stock the Hue value for each metro number
 
 load('Apprentissage.mat');
 
@@ -10,10 +10,16 @@ l = length(BD);
 % im = CreatePicto(num2str(BD(23,1)),23,BD);
 % FindHSV(im)
 
+%Initialize the metro number searched
+metroNum = 2;
+
 for x = 1:l
-        if (BD(x,6) == 2)
+        if (BD(x,6) == metroNum)
             im = CreatePicto(num2str(BD(x,1)),x,BD);
+            %Create a table a values with the position in the database and
+            %the HSV values for the image. 
             [x FindHSV(im)]
+            
         end
 end
     

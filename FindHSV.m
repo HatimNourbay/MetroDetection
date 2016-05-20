@@ -3,7 +3,6 @@ function result = FindHSV(im)
 
 %% Begin with HSV conversion
 
-%im = im2double(imread ('BD/IM (16).JPG'));
 imHSV = rgb2hsv(im);
 gray = rgb2gray(im);
 
@@ -24,6 +23,8 @@ for x = 1:H-1
     for y = 1:W-1
         hsv = imHSV(x,y,:);
         if hsv(1) ~= 0        
+            % converting the value from 0 to 1 to 0 to 10000 to place it in
+            % the histo
             i = floor(hsv(1)*10000);
             i = i + 1;
             histoH(i)= histoH(i) + 1;
@@ -42,6 +43,10 @@ for x = 1:H-1
 end;
 
 
+%% Searching for probability 
+%instead of just picking max value of the H channel, we take the max proba
+%to be sure we are in the colour part of the image
+
 p = zeros(1,10001);
 
 for x = 1:H - 1
@@ -56,6 +61,7 @@ end;
 
 
 %[Num,hue] = max(histoH);
+%We are only interested in Hue value
 [Num,hue] = max(p);
 [Num,sat] = max(histoS);
 [Num,val] = max(histoV);
@@ -68,6 +74,7 @@ figure, bar(0:10000,histoH);title ('My histogram');
 
 figure, bar(0:10000,p);title ('Proba');
 
+% recreating the value from 0 to 1
 result = [hue/10000 sat/10000 val/10000 ];
 
 %% Unused & Deprecated Code 

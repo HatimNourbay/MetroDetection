@@ -4,7 +4,10 @@ close all;
 
 BD = load('Apprentissage.mat');
 
-%% We are searching for the HSV of picto 
+%% We are searching for the HSV of PICTO folder
+% We can have a basis of comparison between the apprentissage database and
+% the real values of original PICTO
+
 HSVPicto = [];
 
 files = dir('PICTOCOLOUR/*.png');
