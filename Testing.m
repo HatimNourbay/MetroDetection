@@ -3,18 +3,34 @@ close all;
 
 %% Begin with black and white
 
-im = im2double(imread('BD/IM (47).JPG'));
-im = rgb2hsv(im);
-
-
+im = im2double(imread('BD/IM (6).JPG'));
+imHSV = rgb2hsv(im);
 gray = rgb2gray(im);
 
 [H,W] = size(gray);
-imfin = zeros(H,W);
 
-h = fspecial('prewitt');
+hello = [];
+tic;
+for x = 1:H - 1
+    for y = 1:W - 1
+        temp = imHSV(x,y,1);
+        if ( (0.82< temp) && (temp < 0.83))
+            hello = [hello imHSV(x,y)];
+            imHSV(x,y,1) = 0;
+        end
+    end
+end
+toc
 
-imres = imfilter(gray,h);
+
+% gray = rgb2gray(im);
+% 
+% [H,W] = size(gray);
+% imfin = zeros(H,W);
+% 
+% h = fspecial('prewitt');
+% 
+% imres = imfilter(gray,h);
 
 
 %% Trying profile
@@ -25,21 +41,21 @@ imres = imfilter(gray,h);
 % plot(profV,'LineWidth',1.5); title 'Profil vertical';grid on
 
 %% Trying normal plot
-imres2 = imfilter(gray,h');
-
-%imres2 = myFilter(imres2,'symmetric');
-
-for x = 1:H-1
-    for y = 1:W-1
-        imfin(x,y) = sqrt(imres(x,y)*imres(x,y) + imres2(x,y)*imres2(x,y));
-        if imfin(x,y) > 0.21
-            imfin(x,y) = 1;
-        else
-            imfin(x,y) = 0;
-            
-        end
-    end
-end
+% imres2 = imfilter(gray,h');
+% 
+% %imres2 = myFilter(imres2,'symmetric');
+% 
+% for x = 1:H-1
+%     for y = 1:W-1
+%         imfin(x,y) = sqrt(imres(x,y)*imres(x,y) + imres2(x,y)*imres2(x,y));
+%         if imfin(x,y) > 0.21
+%             imfin(x,y) = 1;
+%         else
+%             imfin(x,y) = 0;
+%             
+%         end
+%     end
+% end
 
 %%for each white, circle of changing radius 
 % before circle detect pixels around angle and trace arc and cord
@@ -51,7 +67,7 @@ end
 
 
 figure,
-imshow(imfin);
+imshow(imHSV);
 
 % [centers, radii] = imfindcircles(imfin,[20 50],'ObjectPolarity','dark', ...
 %     'Sensitivity',0.95)

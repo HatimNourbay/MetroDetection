@@ -11,17 +11,23 @@ l = length(BD);
 % FindHSV(im)
 
 %Initialize the metro number searched
-metroNum = 2;
+metroNum = 4;
+
+histoHue = zeros(1,10001);
 
 for x = 1:l
         if (BD(x,6) == metroNum)
             im = CreatePicto(num2str(BD(x,1)),x,BD);
             %Create a table a values with the position in the database and
             %the HSV values for the image. 
-            [x FindHSV(im)]
+            %[x FindHSV(im)]
+            f = FindHSV(im);
+            histoHue = histoHue + f;
             
         end
 end
+
+figure, bar(0:10000,histoHue);title ('My histogram');
     
 
 

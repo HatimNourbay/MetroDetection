@@ -53,8 +53,11 @@ for x = 1:H - 1
     for y = 1:W - 1
         i = imHSV(x,y,1);
         if i ~= 0
-            i = floor(i*10000);
-            p(i) = histoH(i) / (H * W);
+            try
+                i = floor(i*10000);
+                p(i) = histoH(i) / (H * W);
+            catch
+            end
         end
     end;
 end;
@@ -66,16 +69,16 @@ end;
 [Num,sat] = max(histoS);
 [Num,val] = max(histoV);
 
-figure, bar(0:10000,histoH);title ('My histogram');
+%figure, bar(0:10000,histoH);title ('My histogram');
 % 
 %         
-% figure;
-% imshow(imHSV);
+ figure;
+ imshow(imHSV(:,:,1));
 
-figure, bar(0:10000,p);title ('Proba');
+%figure, bar(0:10000,p);title ('Proba');
 
 % recreating the value from 0 to 1
-result = [hue/10000 sat/10000 val/10000 ];
+result = p;
 
 %% Unused & Deprecated Code 
 
