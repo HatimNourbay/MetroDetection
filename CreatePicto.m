@@ -1,7 +1,4 @@
-%% Find the picto thanks to the database
-
-
-function result = CreatePicto(numberBD, lign, BD)
+function [result,mask] = CreatePicto(numberBD, lign, BD)
 
 imStr = strcat('BD/IM (',numberBD,').JPG');
 
@@ -34,5 +31,5 @@ croppedImage(:,:,2) = imTemp(:,:,2).*mask;
 croppedImage(:,:,3) = imTemp(:,:,3).*mask;
 %imshow(croppedImage);
 
-imSymbHSV = rgb2hsv(croppedImage);
-result = imSymbHSV;
+result = croppedImage;
+
