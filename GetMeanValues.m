@@ -5,43 +5,55 @@ close all;
 
  load('Apprentissage.mat');
 
-% lignNumber = 98;
-% 
-% 
-% [im,mask] = CreatePicto(num2str(BD(lignNumber,1)),lignNumber,BD);
-% [CircIm NumIm] = ExtractImPart(im);
-% figure;
-% imshow(CircIm);
-
-
-
 %% Initialize the metro number searched
 
-metroNum = 13;
+metroNum = 12;
 l = length(BD);
 
+FilterBySubNum = [];
 
-histoHue = zeros(1,10001);
-fd = figure;
-for x = 1:l
-        if (BD(x,6) == metroNum)
+
+% histoHue = zeros(1,10001);
+% 
+% fd = figure;
+% 
+% 
+% for x = 1:l    
+%         if (BD(x,6) == metroNum)
+%             [im,mask] = CreatePicto(num2str(BD(x,1)),x,BD);
+%             %Create a table a values with the position in the database and
+%             %the HSV values for the image. 
+%             [CircIm NumIm] = ExtractImPart(im);            
+%             [f,hue] = FindHSV(CircIm,mask);
+%             histoHue = histoHue + f;
+%             figure(fd);
+%             plot((0:(length(histoHue)-1))/(length(histoHue)-1), histoHue);
+%         end
+%     end
+
+
+FilterRange = 0.030;
+
+for numSubway = 1:14
+    tic;
+    histoHue = zeros(1,10001);
+    for x = 1:l    
+        if (BD(x,6) == numSubway)
             [im,mask] = CreatePicto(num2str(BD(x,1)),x,BD);
             %Create a table a values with the position in the database and
             %the HSV values for the image. 
-            [CircIm NumIm] = ExtractImPart(im);
-            
+            [CircIm NumIm] = ExtractImPart(im);            
             [f,hue] = FindHSV(CircIm,mask);
             histoHue = histoHue + f;
-            figure(fd);
-            %subplot(1,3,1);imshow(im);
-            %subplot(1,3,2);imshow(hue);
-            plot((0:(length(histoHue)-1))/(length(histoHue)-1), histoHue);
-            %pause
         end
+    end
+    FilterBySubNum = [ FilterBySubNum; numSubway, max(histoHue) - FilterRange, max(histoHue) + FilterRange];
+    toc
 end
-    
 
 
+FilterBySubNum
+%% Deprecated code 
 
 
 % ResultMeanHue = [];

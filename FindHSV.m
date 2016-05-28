@@ -27,8 +27,6 @@ end;
 
 p = histoH / length(X);
 
- figure;
- imshow(imHSV(:,:,:));
 
 result = p;
 result2 = imHSV(:,:,1);
