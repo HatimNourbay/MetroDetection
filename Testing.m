@@ -3,25 +3,27 @@ close all;
 
 %% Begin with black and white
 
-im = im2double(imread('BD/IM (6).JPG'));
+im = im2double(imread('PICTOCOLOUR/11.png'));
 imHSV = rgb2hsv(im);
 gray = rgb2gray(im);
 
 [H,W] = size(gray);
 
-hello = [];
-tic;
-for x = 1:H - 1
-    for y = 1:W - 1
-        temp = imHSV(x,y,1);
-        if ( (0.82< temp) && (temp < 0.83))
-            hello = [hello imHSV(x,y)];
-            imHSV(x,y,1) = 0;
-        end
-    end
-end
-toc
+% hello = [];
+% tic;
+% for x = 1:H - 1
+%     for y = 1:W - 1
+%         temp = imHSV(x,y,1);
+%         if ( (0.82< temp) && (temp < 0.83))
+%             hello = [hello imHSV(x,y)];
+%             imHSV(x,y,1) = 0;
+%         end
+%     end
+% end
+% toc
 
+figure;
+imshow (imHSV);
 
 % gray = rgb2gray(im);
 % 
@@ -64,10 +66,6 @@ toc
 % eliminate white from the list of detection. And 50% of detection of white
 % in the edges means it is a circle
 
-
-
-figure,
-imshow(imHSV);
 
 % [centers, radii] = imfindcircles(imfin,[20 50],'ObjectPolarity','dark', ...
 %     'Sensitivity',0.95)

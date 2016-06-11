@@ -4,16 +4,17 @@ close all;
 %% Stock the Hue value for each metro number
 
  load('Apprentissage.mat');
+ addpath(genpath('PreAnalysis'));
+ 
+ histoHue = zeros(1,10001);
+ l = length(BD);
 
 %% Initialize the metro number searched
 
-metroNum = 12;
-l = length(BD);
-
-FilterBySubNum = [];
-
-
-% histoHue = zeros(1,10001);
+% metroNum = 7;
+% 
+% imPicto = rgb2hsv(im2double(imread ('PICTOCOLOUR/04.png')));
+% 
 % 
 % fd = figure;
 % 
@@ -26,13 +27,23 @@ FilterBySubNum = [];
 %             [CircIm NumIm] = ExtractImPart(im);            
 %             [f,hue] = FindHSV(CircIm,mask);
 %             histoHue = histoHue + f;
+%             %histoHue = histoHue > 0.05;
 %             figure(fd);
 %             plot((0:(length(histoHue)-1))/(length(histoHue)-1), histoHue);
 %         end
-%     end
+% end
+% 
+% histoHue = histoHue(1:5000);
+% 
+% ifirst = find (histoHue > 0,1,'first')
+% ilast = find (histoHue > 0,1,'last')
 
 
-FilterRange = 0.030;
+% figure;
+% imshow(imPicto);
+
+
+FilterBySubNum = [];
 
 for numSubway = 1:14
     tic;
@@ -45,9 +56,22 @@ for numSubway = 1:14
             [CircIm NumIm] = ExtractImPart(im);            
             [f,hue] = FindHSV(CircIm,mask);
             histoHue = histoHue + f;
+            histoHue = histoHue > 0.03;
         end
     end
-    FilterBySubNum = [ FilterBySubNum; numSubway, max(histoHue) - FilterRange, max(histoHue) + FilterRange];
+    if (numSubway ~= 7 && numSubway ~= 11)
+        FilterBySubNum = [ FilterBySubNum; numSubway, (find(histoHue > 0,1,'first') - 300)/10000, (find(histoHue > 0,1,'last') + 300)/10000,0,0];
+    elseif (numSubway == 11)
+        FilterBySubNum = [ FilterBySubNum; numSubway, (find(histoHue > 0,1,'first') - 150)/10000, (find(histoHue > 0,1,'last') + 150)/10000,0,0];
+    else
+        % 7 has the odd behavior of having two Hue present in the photos.
+        % We are separating the graph in two to find all the possible hues.
+        FilterBySubNum = [ FilterBySubNum; 7, (find(histoHue(1:5000) > 0,1,'first'))/10000,...
+            (find(histoHue(1:5000) > 0,1,'last'))/10000,...
+            (find(histoHue(5001:10000) > 0,1,'first')+5000)/10000,...
+            (find(histoHue(5001:10000) > 0,1,'last')+5000)/10000];
+        
+    end
     toc
 end
 
