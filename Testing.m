@@ -3,7 +3,7 @@ close all;
 
 %% Begin with black and white
 
-im = im2double(imread('PICTOCOLOUR/11.png'));
+im = im2double(imread('BD/IM (166).JPG'));
 imHSV = rgb2hsv(im);
 gray = rgb2gray(im);
 
@@ -22,17 +22,15 @@ gray = rgb2gray(im);
 % end
 % toc
 
-figure;
-imshow (imHSV);
+% figure;
+% imshow (imHSV);
 
-% gray = rgb2gray(im);
-% 
-% [H,W] = size(gray);
-% imfin = zeros(H,W);
-% 
-% h = fspecial('prewitt');
-% 
-% imres = imfilter(gray,h);
+imfin = zeros(H,W);
+
+h = fspecial('prewitt');
+
+imres = imfilter(gray,h);
+
 
 
 %% Trying profile
@@ -43,21 +41,27 @@ imshow (imHSV);
 % plot(profV,'LineWidth',1.5); title 'Profil vertical';grid on
 
 %% Trying normal plot
-% imres2 = imfilter(gray,h');
-% 
-% %imres2 = myFilter(imres2,'symmetric');
-% 
-% for x = 1:H-1
-%     for y = 1:W-1
-%         imfin(x,y) = sqrt(imres(x,y)*imres(x,y) + imres2(x,y)*imres2(x,y));
-%         if imfin(x,y) > 0.21
-%             imfin(x,y) = 1;
-%         else
-%             imfin(x,y) = 0;
-%             
-%         end
-%     end
-% end
+imres2 = imfilter(gray,h');
+
+%imres2 = myFilter(imres2,'symmetric');
+
+for x = 1:H-1
+    for y = 1:W-1
+        imfin(x,y) = sqrt(imres(x,y)*imres(x,y) + imres2(x,y)*imres2(x,y));
+        if imfin(x,y) > 0.21
+            imfin(x,y) = 1;
+        else
+            imfin(x,y) = 0;
+            
+        end
+    end
+end
+
+
+imCropped = imcrop(imfin,[397,806,490,132]);
+
+figure;
+imshow(imfin);
 
 %%for each white, circle of changing radius 
 % before circle detect pixels around angle and trace arc and cord
@@ -66,12 +70,19 @@ imshow (imHSV);
 % eliminate white from the list of detection. And 50% of detection of white
 % in the edges means it is a circle
 
+tic;
 
-% [centers, radii] = imfindcircles(imfin,[20 50],'ObjectPolarity','dark', ...
-%     'Sensitivity',0.95)
-% 
-% [centersM, radiiM] = imfindcircles(imfin,[50 100],'ObjectPolarity','dark', ...
-%     'Sensitivity',0.95)
-% 
-% [centersB, radiiB] = imfindcircles(imfin,[100 170],'ObjectPolarity','dark', ...
-%     'Sensitivity',0.95)
+[centers, radii] = imfindcircles(imfin,[20 50],'ObjectPolarity','dark', ...
+    'Sensitivity',0.95)
+
+[centersM, radiiM] = imfindcircles(imfin,[50 100],'ObjectPolarity','dark', ...
+    'Sensitivity',0.95)
+
+[centersB, radiiB] = imfindcircles(imfin,[100 170],'ObjectPolarity','dark', ...
+    'Sensitivity',0.95)
+
+toc
+
+viscircles(centers, radii,'EdgeColor','r');
+viscircles(centersM, radiiM,'EdgeColor','b');
+viscircles(centersB, radiiB,'EdgeColor','g');

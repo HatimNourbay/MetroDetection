@@ -2,33 +2,44 @@ clear all;
 close all;
 
 addpath(genpath('PreAnalysis'));
+addpath(genpath('FinalAnalysis'));
 load('Test.mat');
 load('FilterBySubNum');
 
-BDLine = 110;
+BDLine = 72;
 numberBD = num2str(BD(BDLine,1));
-%MetroLine = BD(BDLine,6);
-MetroLine = 10;
+MetroLine = BD(BDLine,6);
+%MetroLine = 1;
 
 imStr = strcat('BD/IM (',numberBD,').JPG');
 
 im = im2double(imread (imStr));
 
-newBound = ApplyHueFilter(im,MetroLine);
+im = WhiteElimintation(im);
 
+imHSV = rgb2hsv(im);
+    
 
-%figure;
-%imshow(im);impixelinfo;
+figure;
+imshow(im);
 
-[row,column] = size(newBound);
+tic;
+getFinalBoundBox = ExtractHueCircle(im,MetroLine);
+toc
 
-if row > 1
-    for k = 1 : length(newBound)
-        rectangle('Position', [newBound(k,1),newBound(k,2),newBound(k,3),newBound(k,4)],...
-        'EdgeColor','r','LineWidth',2 )
-    end
+[row, column] = size(getFinalBoundBox);
+
+if (isempty(getFinalBoundBox))    
 else
-    rectangle('Position', [newBound(1,1),newBound(1,2),newBound(1,3),newBound(1,4)],...
-        'EdgeColor','r','LineWidth',2 )
+    tic;
+    for d = 1:row
+        croppedVerification = imcrop(imHSV,getFinalBoundBox(d,:));
+        [imPart, numPart] = ExtractImPart(croppedVerification);
+        figure;
+        imshow(imPart);
+    end 
+    toc
 end
+
+
 
