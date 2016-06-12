@@ -19,4 +19,7 @@ for x = 1:H-1
     end
 end
 
+SE = strel('line',5,5);
+imfin = imdilate(imfin,SE);
+
 imPrewitt = imfin;

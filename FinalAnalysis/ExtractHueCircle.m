@@ -1,6 +1,6 @@
-function result  = ExtractHueCircle(im,MetroLine)
+function [circleBound,imHSV] = ExtractHueCircle(im,MetroLine)
 
-
+imHSV = im;
 [imFiltered, newBound] = ApplyHueFilter(im,MetroLine);
 
 imFiltered = myPrewittFilter(imFiltered);
@@ -8,12 +8,12 @@ imFiltered = myPrewittFilter(imFiltered);
 figure;
 imshow(imFiltered);
 
-%[temprow, tempcolumn] = size(newBound);
+[temprow, tempcolumn] = size(newBound);
 
-% for k = 1 : temprow
-%   rectangle('Position', [newBound(k,:)],...
-%   'EdgeColor','r','LineWidth',2 )
-% end
+for k = 1 : temprow
+  rectangle('Position', [newBound(k,:)],...
+  'EdgeColor','r','LineWidth',2 )
+end
 
 [H,W] = size(imFiltered);
 [row,column] = size(newBound);
@@ -51,7 +51,7 @@ if newBound ~= 0
 %         imshow(tempIm);
         
             [centers, radii] = imfindcircles(tempIm,[minRad, maxRad],'ObjectPolarity','dark', ...
-            'Sensitivity',0.96);
+            'Sensitivity',0.97);
      
             if (isempty(centers) && isempty(radii))
             else
@@ -68,20 +68,20 @@ if newBound ~= 0
     else
     end
 else
-    [centers, radii] = imfindcircles(imFiltered,[50, 120],'ObjectPolarity','dark', ...
-            'Sensitivity',0.96);
-     
-            if (isempty(centers) && isempty(radii))
-            else
-                for s = 1:(length(radii))
-                    XcircleBound = floor(centers(s,1) - radii(s));
-                    YcircleBound = floor(centers(s,2) - radii(s));
-                    Xcolumns = floor(radii(s)*2);
-                    Yrows = floor(radii(s)*2);
-                    actualCircleBound = [actualCircleBound; XcircleBound, YcircleBound, ...
-                    Xcolumns,Yrows];
-                end
-            end
+%     [centers, radii] = imfindcircles(imFiltered,[50, 120],'ObjectPolarity','dark', ...
+%             'Sensitivity',0.96);
+%      
+%             if (isempty(centers) && isempty(radii))
+%             else
+%                 for s = 1:(length(radii))
+%                     XcircleBound = floor(centers(s,1) - radii(s));
+%                     YcircleBound = floor(centers(s,2) - radii(s));
+%                     Xcolumns = floor(radii(s)*2);
+%                     Yrows = floor(radii(s)*2);
+%                     actualCircleBound = [actualCircleBound; XcircleBound, YcircleBound, ...
+%                     Xcolumns,Yrows];
+%                 end
+%             end
 end
 
-result = actualCircleBound;
+circleBound = actualCircleBound;

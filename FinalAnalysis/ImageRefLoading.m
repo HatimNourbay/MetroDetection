@@ -25,7 +25,7 @@ for i=1:nbobjets
         for l=y0-delta:y0+delta
             test = x(k:k+Hr-1,l:l+Wr-1);           % extraire l'image testée (meme taille que les images de référence
             for r=1:10                                     % boucle sur les images de référence
-                correl = corr2(iref(:,:,r),test);           % corrélation
+                correl = corr2(imref(:,:,r),test);           % corrélation
                 if correl > maxcorr                        % retenir le max
                     maxcorr = correl;                        % varie entre -1 et 1
                     maxr = r;                     % maxr: classe num image qui ressemble
