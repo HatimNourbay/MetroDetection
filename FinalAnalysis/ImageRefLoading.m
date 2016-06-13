@@ -14,8 +14,16 @@ for i=1:nbobjets
     x1= round(c.BoundingBox(2));
     W = c.BoundingBox(3);
     H = c.BoundingBox(4);
+    ratio = H/W;
     
-    tableRegions = [tableRegions; c.BoundingBox(1:4)];
+    tableRegions = [tableRegions;nbobjets, c.BoundingBox(1:4)];
+end
+
+figure;
+imshow(imSprites);
+for k = 1 : 10
+    rectangle('Position', tableRegions(k,2:5),...
+        'EdgeColor','r','LineWidth',2 )
 end
     
 
