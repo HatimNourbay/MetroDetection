@@ -4,16 +4,16 @@ imHSV = im;
 [imFiltered, newBound] = ApplyHueFilter(im,MetroLine);
 
 imFiltered = myPrewittFilter(imFiltered);
-
-figure;
-imshow(imFiltered);
+% 
+% figure;
+% imshow(imFiltered);
 
 [temprow, tempcolumn] = size(newBound);
 
-for k = 1 : temprow
-  rectangle('Position', [newBound(k,:)],...
-  'EdgeColor','r','LineWidth',2 )
-end
+% for k = 1 : temprow
+%   rectangle('Position', [newBound(k,:)],...
+%   'EdgeColor','r','LineWidth',2 )
+% end
 
 [H,W] = size(imFiltered);
 [row,column] = size(newBound);

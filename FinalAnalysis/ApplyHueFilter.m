@@ -27,8 +27,8 @@ for x = 1:H
 end
 
 imFiltered = imCopy;
-figure;
-imshow(imCopy);
+% figure;
+% imshow(imCopy);
 
 L = bwlabel(imCopy,8);
 stats = regionprops('table',L,'BoundingBox');
